@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="5dp"
+    android:elevation="4dp"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/img"
+            android:id="@+id/image"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/name"
+            android:text="This is Header Text"
+            android:textStyle="bold"
+            android:textSize="16dp"
+            android:layout_toRightOf="@+id/image"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="6dp"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/avg"
+            android:text="Average : "
+            android:layout_below="@+id/name"
+            android:layout_toRightOf="@+id/image"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="6dp"
+            />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
