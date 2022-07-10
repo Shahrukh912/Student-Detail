@@ -1,5 +1,11 @@
 package com.srk.studentdetails;
 
+import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +15,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder>{
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> implements Runnable{
     public ArrayList<Modal> data;
     public RecyclerViewClickListener clickListener;
+    public Handler uiHandler;
 
     public DataAdapter(ArrayList<Modal> data,RecyclerViewClickListener listener) {
         this.data = data;
         this.clickListener = listener;
+        uiHandler = new Handler();
     }
 
     @NonNull
@@ -31,10 +44,22 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        //final int tempPosition = position;
         holder.name.setText(data.get(position).getName());
         ArrayList<Score> scores = data.get(position).getScores();
         double avg = (scores.get(0).getScore()+scores.get(1).getScore()+scores.get(2).getScore())/3;
         holder.avg.setText("Average : " + avg);
+        Log.d(TAG, "onBindViewHolder: " + data.get(position).getImage());
+        if(data.get(position).getImage() != null){
+            holder.img.setImageBitmap(data.get(position).getImage());
+        }else{
+            Log.d(TAG, "onBindViewHolder: Inside else");
+            Thread t = new Thread(this,String.valueOf(position));
+            t.start();
+        }
+
+
+
     }
 
 
@@ -42,6 +67,36 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder>{
     public int getItemCount()
     {
         return data.size();
+    }
+
+    @Override
+    public void run() {
+        final int pos = Integer.parseInt(Thread.currentThread().getName());
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(SplashScreen.DRIVE_IMAGE_FORMATED_URL+data.get(pos).getImageId())
+                .build();
+        Log.d(TAG, "run: inside thread" + pos + " | "+SplashScreen.DRIVE_IMAGE_FORMATED_URL+data.get(pos).getImageId());
+        try (Response response = client.newCall(request).execute()) {
+            if(response.isSuccessful()){
+                byte res[] = response.body().bytes();
+                final Bitmap b = BitmapFactory.decodeByteArray(res,0,res.length);
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        data.get(pos).setImage(b);
+                        notifyItemChanged(pos);
+                        Log.d(TAG, "adapter run: ");
+
+                    }
+                });
+
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

@@ -9,8 +9,12 @@ public class Modal implements Serializable {
     public int _id;
     public String name;
     public String imageId;
+    public Bitmap image;
     public ArrayList<Score> scores = new ArrayList<Score>();
 
+    public Bitmap getImage() { return image;}
+
+    public void setImage(Bitmap image) { this.image = image; }
 
     public int get_id() {
         return _id;

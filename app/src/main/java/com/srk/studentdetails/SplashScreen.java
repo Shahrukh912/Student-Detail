@@ -102,13 +102,6 @@ public class SplashScreen extends AppCompatActivity {
 
 
     private void startMainActivity() {
-        //set the adapter for Recycler view.
-        /*SplashScreen.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });*/
 
         Intent i = new Intent(SplashScreen.this,MainActivity.class);
         Bundle b = new Bundle();
