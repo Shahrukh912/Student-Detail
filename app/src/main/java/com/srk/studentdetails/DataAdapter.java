@@ -49,11 +49,11 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
         ArrayList<Score> scores = data.get(position).getScores();
         double avg = (scores.get(0).getScore()+scores.get(1).getScore()+scores.get(2).getScore())/3;
         holder.avg.setText("Average : " + avg);
-        Log.d(TAG, "onBindViewHolder: " + data.get(position).getImage());
+
         if(data.get(position).getImage() != null){
             holder.img.setImageBitmap(data.get(position).getImage());
         }else{
-            Log.d(TAG, "onBindViewHolder: Inside else");
+
             Thread t = new Thread(this,String.valueOf(position));
             t.start();
         }
@@ -76,7 +76,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
         Request request = new Request.Builder()
                 .url(SplashScreen.DRIVE_IMAGE_FORMATED_URL+data.get(pos).getImageId())
                 .build();
-        Log.d(TAG, "run: inside thread" + pos + " | "+SplashScreen.DRIVE_IMAGE_FORMATED_URL+data.get(pos).getImageId());
+
         try (Response response = client.newCall(request).execute()) {
             if(response.isSuccessful()){
                 byte res[] = response.body().bytes();
@@ -86,8 +86,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
                     public void run() {
                         data.get(pos).setImage(b);
                         notifyItemChanged(pos);
-                        Log.d(TAG, "adapter run: ");
-
                     }
                 });
 

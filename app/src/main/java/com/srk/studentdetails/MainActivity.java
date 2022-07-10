@@ -73,30 +73,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         rcv.setAdapter(adapter);
-
-
-/*
-        Handler handler = new Handler();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder()
-                        .url(SplashScreen.DRIVE_IMAGE_FORMATED_URL+modal.get(0).getImageId())
-                        .build();
-
-                try (Response response = client.newCall(request).execute()) {
-                    if(response.isSuccessful()){
-                        byte res[] = response.body().bytes();
-                        final Bitmap b = BitmapFactory.decodeByteArray(res,0,res.length);
-                        modal.get(0).setImage(b);
-                        adapter.notifyItemChanged(0);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });*/
     }
 }
